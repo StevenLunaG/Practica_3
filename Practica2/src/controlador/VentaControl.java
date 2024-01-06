@@ -21,7 +21,7 @@ public class VentaControl {
     public Boolean guardar() {
         
         try {
-            getVenta().setId(getVentas().getLenght());
+            getVenta().setId(getVentas().getLength());
             getVentas().add(getVenta());
             return true;
         } catch (Exception e) {

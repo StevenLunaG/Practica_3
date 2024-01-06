@@ -33,7 +33,7 @@ public class TipoCasaArchivos extends DaoImplement<TipoCasa>{
     }
     
     public Boolean persist(){
-        tipo.setId(all().getLenght() + 1);
+        tipo.setId(all().getLength() + 1);
         return persist(tipo);
     }
     

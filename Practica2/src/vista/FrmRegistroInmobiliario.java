@@ -16,46 +16,47 @@ import vista.listas.tablas.VentaTabla;
 import vista.listas.util.Utilvista;
 
 public class FrmRegistroInmobiliario extends javax.swing.JFrame {
-    
+
     private VentaControl ventaControl = new VentaControl();
     private VentaTabla vt = new VentaTabla();
-    private controlador.Venta.VentaArchivos control = new controlador.Venta.VentaArchivos();
-    
+    private controlador.Venta.VentaArchivos fileVenta = new controlador.Venta.VentaArchivos();
+
     private RegistroControl registroControl = new RegistroControl();
     private controlador.Venta.RegistroArchivos rControl = new controlador.Venta.RegistroArchivos();
-    
+
     FrmNuevaVivienda nuevaVivienda = new FrmNuevaVivienda();
-    
-    private void cargarVista(int fila){
-            try {
-                ventaControl.setVenta(vt.getVentas().getInfo(fila));
-                
-                txtVenApellido.setText(ventaControl.getVenta().getVendedor().getApellido());
-                txtVenDni.setText(ventaControl.getVenta().getVendedor().getDni());
-                txtVenDni.setEnabled(false);
-                txtVenNombre.setText(ventaControl.getVenta().getVendedor().getNombre());
-                txtVenTelef.setText(ventaControl.getVenta().getVendedor().getTelefono());
-                txtAgencia.setText(ventaControl.getVenta().getVendedor().getAgencia());
-                txtPorcentaje.setText(ventaControl.getVenta().getVendedor().getPorcentajeComision().toString());
-                
-                txtClieApellido.setText(ventaControl.getVenta().getCliente().getApellido());
-                txtClieDni.setText(ventaControl.getVenta().getCliente().getDni());
-                txtClieDni.setEnabled(false);
-                txtClieNombre.setText(ventaControl.getVenta().getCliente().getNombre());
-                txtClieTelef.setText(ventaControl.getVenta().getCliente().getTelefono());
 
-                txtFecha.setText(ventaControl.getVenta().getFecha().toString());
-                txtFecha.setEnabled(false);
-                txtSMonto.setText(ventaControl.getVenta().getMonto().toString());
+    private void cargarVista(int fila) {
+        try {
+            ventaControl.setVenta(vt.getVentas().getInfo(fila));
 
-                cbxCasa.setSelectedIndex(ventaControl.getVenta().getVivienda().getId());
-                cbxCasa.setEnabled(false);
-                
-            } catch (Exception ex) {
-                Logger.getLogger(FrmRegistroInmobiliario.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            txtVenApellido.setText(ventaControl.getVenta().getVendedor().getApellido());
+            txtVenDni.setText(ventaControl.getVenta().getVendedor().getDni());
+            txtVenDni.setEnabled(false);
+            txtVenNombre.setText(ventaControl.getVenta().getVendedor().getNombre());
+            txtVenTelef.setText(ventaControl.getVenta().getVendedor().getTelefono());
+            txtAgencia.setText(ventaControl.getVenta().getVendedor().getAgencia());
+            txtPorcentaje.setText(ventaControl.getVenta().getVendedor().getPorcentajeComision().toString());
+
+            txtClieApellido.setText(ventaControl.getVenta().getCliente().getApellido());
+            txtClieDni.setText(ventaControl.getVenta().getCliente().getDni());
+            txtClieDni.setEnabled(false);
+            txtClieNombre.setText(ventaControl.getVenta().getCliente().getNombre());
+            txtClieTelef.setText(ventaControl.getVenta().getCliente().getTelefono());
+
+            txtFecha.setText(ventaControl.getVenta().getFecha().toString());
+            txtFecha.setEnabled(false);
+            txtSMonto.setText(ventaControl.getVenta().getMonto().toString());
+
+            cbxCasa.setSelectedIndex(ventaControl.getVenta().getVivienda().getId());
+            cbxCasa.setEnabled(false);
+            btGuardarCambios.setEnabled(true);
+
+        } catch (Exception ex) {
+            Logger.getLogger(FrmRegistroInmobiliario.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     public Boolean verificar() {
         return (!txtVenApellido.getText().trim().isEmpty()
                 && !txtVenNombre.getText().trim().isEmpty()
@@ -67,21 +68,21 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
                 && !cbxCasa.getSelectedItem().toString().trim().isEmpty()
                 && !txtSMonto.getText().trim().isEmpty());
     }
-    
+
     private void cargarTabla() {
-        vt.setVentas(control.all());
+        vt.setVentas(fileVenta.all());
         tbVenta.setModel(vt);
         tbVenta.updateUI();
     }
-    
-    private void cargarCombo(){
+
+    private void cargarCombo() {
         try {
-                Utilvista.cargarComboViviendas(cbxCasa);
-            } catch (EmptyException ex) {
-                JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
-            }
+            Utilvista.cargarComboViviendas(cbxCasa);
+        } catch (EmptyException ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
     }
-    
+
     private void limpiar() {
         try {
             Utilvista.cargarComboViviendas(cbxCasa);
@@ -89,7 +90,7 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
         }
         tbVenta.clearSelection();
-        
+
         txtVenDni.setEnabled(true);
         txtVenApellido.setText("");
         txtVenDni.setText("");
@@ -97,94 +98,94 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
         txtVenTelef.setText("");
         txtAgencia.setText("");
         txtPorcentaje.setText("");
-        
-        
+
         txtClieDni.setEnabled(true);
         txtClieApellido.setText("");
         txtClieDni.setText("");
         txtClieNombre.setText("");
         txtClieTelef.setText("");
-        
+
         txtFecha.setEnabled(true);
         txtFecha.setText("yyyy-mm-dd");
         txtSMonto.setText("");
         cbxCasa.setEnabled(true);
-        
+        btGuardarCambios.setEnabled(false);
+
         cargarTabla();
         ventaControl.setVenta(null);
         cbxCasa.setSelectedIndex(-1);
     }
-    
+
     private void guardar() throws EmptyException {
         if (verificar()) {
 
             if (cbxCasa.getSelectedItem().toString().contains("[No Disponible]")) {
                 JOptionPane.showMessageDialog(null, "La vivienda no esta disponible", "Error", JOptionPane.ERROR_MESSAGE);
-            } else{
-
-            if (Utiles.validadorDeCedula(txtVenDni.getText()) && Utiles.validadorDeCedula(txtClieDni.getText())) {
-
-                //Datos Vendedor
-                ventaControl.getVenta().getVendedor().setDni(txtVenDni.getText());
-                ventaControl.getVenta().getVendedor().setApellido(txtVenApellido.getText());
-                ventaControl.getVenta().getVendedor().setNombre(txtVenNombre.getText());
-                ventaControl.getVenta().getVendedor().setTelefono(txtVenTelef.getText());
-                ventaControl.getVenta().getVendedor().setAgencia(txtAgencia.getText());
-                ventaControl.getVenta().getVendedor().setPorcentajeComision(Double.valueOf(txtPorcentaje.getText()));
-                
-                //Datos Cliente
-                ventaControl.getVenta().getCliente().setDni(txtClieDni.getText());
-                ventaControl.getVenta().getCliente().setApellido(txtClieApellido.getText());
-                ventaControl.getVenta().getCliente().setNombre(txtClieNombre.getText());
-                ventaControl.getVenta().getCliente().setTelefono(txtClieTelef.getText());
-
-                ventaControl.getVenta().setFecha(Utiles.stringToDate(txtFecha.getText()));
-
-                ventaControl.getVenta().setVivienda(cbxCasa.getSelectedIndex());
-                
-                ventaControl.getVenta().getVivienda().setDisponible(false);
-                modificarDisponibilidadCasa(ventaControl.getVenta().getVivienda(), ventaControl.getVenta().getVivienda().getId());
-                
-                ventaControl.getVenta().setMonto(Double.valueOf(txtSMonto.getText()));
-                if (ventaControl.guardar()) {
-                    control.persist(ventaControl.getVenta());
-                    JOptionPane.showMessageDialog(null, "Datos guardados");
-                    cargarTabla();
-                    limpiar();
-                    ventaControl.setVenta(null);
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo guardar, hubo un error");
-                }
             } else {
-                JOptionPane.showMessageDialog(null, "Cedula no valida");
-            }
+
+                if (Utiles.validadorDeCedula(txtVenDni.getText()) && Utiles.validadorDeCedula(txtClieDni.getText())) {
+
+                    //Datos Vendedor
+                    ventaControl.getVenta().getVendedor().setDni(txtVenDni.getText());
+                    ventaControl.getVenta().getVendedor().setApellido(txtVenApellido.getText());
+                    ventaControl.getVenta().getVendedor().setNombre(txtVenNombre.getText());
+                    ventaControl.getVenta().getVendedor().setTelefono(txtVenTelef.getText());
+                    ventaControl.getVenta().getVendedor().setAgencia(txtAgencia.getText());
+                    ventaControl.getVenta().getVendedor().setPorcentajeComision(Double.valueOf(txtPorcentaje.getText()));
+
+                    //Datos Cliente
+                    ventaControl.getVenta().getCliente().setDni(txtClieDni.getText());
+                    ventaControl.getVenta().getCliente().setApellido(txtClieApellido.getText());
+                    ventaControl.getVenta().getCliente().setNombre(txtClieNombre.getText());
+                    ventaControl.getVenta().getCliente().setTelefono(txtClieTelef.getText());
+
+                    ventaControl.getVenta().setFecha(Utiles.stringToDate(txtFecha.getText()));
+
+                    ventaControl.getVenta().setVivienda(cbxCasa.getSelectedIndex());
+
+                    ventaControl.getVenta().getVivienda().setDisponible(false);
+                    modificarDisponibilidadCasa(ventaControl.getVenta().getVivienda(), ventaControl.getVenta().getVivienda().getId());
+
+                    ventaControl.getVenta().setMonto(Double.valueOf(txtSMonto.getText()));
+                    if (ventaControl.guardar()) {
+                        fileVenta.setVenta(ventaControl.getVenta());
+                        fileVenta.persist();
+                        JOptionPane.showMessageDialog(null, "Datos guardados");
+                        cargarTabla();
+                        limpiar();
+                        ventaControl.setVenta(null);
+                    } else {
+                        JOptionPane.showMessageDialog(null, "No se pudo guardar, hubo un error");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Cedula no valida");
+                }
             }
         } else {
             JOptionPane.showMessageDialog(null, "Falta llenar campos", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
-    private void generarRegistro() throws EmptyException{
-        registroControl.getRegistro().setVentaList(control.all());
-        
-        if (registroControl.guardar()) {
-                    rControl.persist(registroControl.getRegistro());
-                    JOptionPane.showMessageDialog(null, "Datos guardados");
-                    cargarTabla();
-                    limpiar();
-                    ventaControl.setVenta(null);
-                } else {
-                    JOptionPane.showMessageDialog(null, "No se pudo guardar, hubo un error");
-                }
-    }
-    
-    private void modificarDisponibilidadCasa(Vivienda vivienda, Integer id){
+
+//    private void generarRegistro() throws EmptyException{
+//        registroControl.getRegistro().setVentaList(control.all());
+//        
+//        if (registroControl.guardar()) {
+//                    rControl.persist(registroControl.getRegistro());
+//                    JOptionPane.showMessageDialog(null, "Datos guardados");
+//                    cargarTabla();
+//                    limpiar();
+//                    ventaControl.setVenta(null);
+//                } else {
+//                    JOptionPane.showMessageDialog(null, "No se pudo guardar, hubo un error");
+//                }
+//    }
+    private void modificarDisponibilidadCasa(Vivienda vivienda, Integer id) {
         ViviendaArchivos vc = new ViviendaArchivos();
         vc.merge(vivienda, id);
     }
-    
-    private void modificar() throws EmptyException{
-        
+
+    private void modificar() throws EmptyException {
+
         //Datos Vendedor
         ventaControl.getVenta().getVendedor().setApellido(txtVenApellido.getText());
         ventaControl.getVenta().getVendedor().setNombre(txtVenNombre.getText());
@@ -197,14 +198,49 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
         ventaControl.getVenta().getCliente().setNombre(txtClieNombre.getText());
         ventaControl.getVenta().getCliente().setTelefono(txtClieTelef.getText());
 
-
         ventaControl.getVenta().setMonto(Double.valueOf(txtSMonto.getText()));
-        control.merge(ventaControl.getVenta(), ventaControl.getVenta().getId());
-        
+        fileVenta.merge(ventaControl.getVenta(), ventaControl.getVenta().getId());
+
         cargarTabla();
         limpiar();
     }
-    
+
+    private void ordenarShell() {
+
+    }
+
+    private void ordenar(Integer var) {
+        String criterio = cbxCriterio.getSelectedItem().toString();
+        Integer tipo = 0;
+        switch (var) {
+            case 1:
+                if (cbxOrden.getSelectedIndex() == 1) {
+                    tipo = 1;
+                }
+                try {
+                    vt.setVentas(fileVenta.ordenarQuick(fileVenta.all(), criterio, tipo));
+                    tbVenta.setModel(vt);
+                    tbVenta.updateUI();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            case 2:
+                if (cbxOrden.getSelectedIndex() == 1) {
+                    tipo = 1;
+                }
+                try {
+                    vt.setVentas(fileVenta.ordenarShell(fileVenta.all(), criterio, tipo));
+                    tbVenta.setModel(vt);
+                    tbVenta.updateUI();
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, e.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+                break;
+            default:
+                throw new AssertionError();
+        }
+    }
 
     /**
      * Creates new form FrmRegistroInmobiliario
@@ -254,16 +290,24 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
         lblMoney = new javax.swing.JLabel();
         btGuardar1 = new javax.swing.JButton();
         btLimpiar1 = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tbVenta = new javax.swing.JTable();
-        btSeleccionar1 = new javax.swing.JButton();
-        btModificar = new javax.swing.JButton();
         txtSMonto = new javax.swing.JTextField();
         lblVenApellido1 = new javax.swing.JLabel();
         txtAgencia = new javax.swing.JTextField();
         lblComision = new javax.swing.JLabel();
         txtPorcentaje = new javax.swing.JTextField();
         lblMoney1 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        btGuardarCambios = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbVenta = new javax.swing.JTable();
+        lblVivienda1 = new javax.swing.JLabel();
+        lblVenDni1 = new javax.swing.JLabel();
+        cbxMetodo = new javax.swing.JComboBox<>();
+        jLabel1 = new javax.swing.JLabel();
+        cbxOrden = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        cbxCriterio = new javax.swing.JComboBox<>();
+        btOrdenar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -281,6 +325,17 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 cbxCasaPopupMenuWillBecomeVisible(evt);
+            }
+        });
+        cbxCasa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                cbxCasaMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                cbxCasaMouseEntered(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                cbxCasaMousePressed(evt);
             }
         });
         cbxCasa.addActionListener(new java.awt.event.ActionListener() {
@@ -349,43 +404,10 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
             }
         });
 
-        btLimpiar1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        btLimpiar1.setText("Limpiar/Actualizar");
+        btLimpiar1.setText("Limpiar");
         btLimpiar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btLimpiar1ActionPerformed(evt);
-            }
-        });
-
-        tbVenta.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        tbVenta.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbVentaMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(tbVenta);
-
-        btSeleccionar1.setText("Cargar");
-        btSeleccionar1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btSeleccionar1ActionPerformed(evt);
-            }
-        });
-
-        btModificar.setText("Modificar");
-        btModificar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btModificarActionPerformed(evt);
             }
         });
 
@@ -414,97 +436,193 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
         lblMoney1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         lblMoney1.setText("%");
 
+        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        btGuardarCambios.setText("Guardar Cambios");
+        btGuardarCambios.setEnabled(false);
+        btGuardarCambios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btGuardarCambiosActionPerformed(evt);
+            }
+        });
+
+        tbVenta.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbVenta.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbVentaMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbVenta);
+
+        lblVivienda1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblVivienda1.setText("Ordenar Registro");
+
+        lblVenDni1.setText("Metodo de Ordenamiento:");
+
+        cbxMetodo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Quicksort", "Shellsort" }));
+
+        jLabel1.setText("Orden:");
+
+        cbxOrden.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Descendente", "Ascendente" }));
+
+        jLabel2.setText("Criterio:");
+
+        cbxCriterio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Registro", "Fecha", "Vivienda", "Vendedor", "Cliente" }));
+
+        btOrdenar.setText("Ordenar");
+        btOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btOrdenarActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(148, 148, 148)
+                        .addComponent(btGuardarCambios))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblVivienda1)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(lblVenDni1)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(cbxMetodo, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addComponent(btOrdenar)
+                                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                                .addComponent(jLabel1)
+                                                .addGap(18, 18, 18)
+                                                .addComponent(cbxOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(30, 30, 30)
+                                                .addComponent(jLabel2)))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(cbxCriterio, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 387, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblVivienda1)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblVenDni1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbxMetodo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbxOrden, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(cbxCriterio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(btOrdenar)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btGuardarCambios)
+                .addGap(14, 14, 14))
+        );
+
         javax.swing.GroupLayout txtMontoLayout = new javax.swing.GroupLayout(txtMonto);
         txtMonto.setLayout(txtMontoLayout);
         txtMontoLayout.setHorizontalGroup(
             txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(txtMontoLayout.createSequentialGroup()
+                .addGap(437, 437, 437)
+                .addComponent(lblTitulo)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(txtMontoLayout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(txtMontoLayout.createSequentialGroup()
+                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblClieDni)
+                            .addComponent(lblClieApellido)
+                            .addComponent(lblFecha))
+                        .addGap(18, 18, 18)
                         .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtClieApellido)
+                            .addComponent(txtClieDni)
+                            .addComponent(txtFecha))
+                        .addGap(18, 18, 18)
+                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblClieNombre)
+                            .addComponent(lblClieTelef)
+                            .addComponent(lblMonto))
+                        .addGap(18, 18, 18)
+                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtClieNombre)
+                            .addComponent(txtClieTelef, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(txtMontoLayout.createSequentialGroup()
-                                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblClieDni)
-                                    .addComponent(lblClieApellido)
-                                    .addComponent(lblFecha))
-                                .addGap(18, 18, 18)
-                                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtClieApellido)
-                                    .addComponent(txtClieDni)
-                                    .addComponent(txtFecha))
-                                .addGap(18, 18, 18)
-                                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(lblClieNombre)
-                                    .addComponent(lblClieTelef)
-                                    .addComponent(lblMonto))
-                                .addGap(18, 18, 18)
-                                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtClieNombre)
-                                    .addComponent(txtClieTelef, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(txtMontoLayout.createSequentialGroup()
-                                        .addComponent(lblMoney)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txtSMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, txtMontoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(lblVenApellido1)
-                                .addGap(18, 18, 18)
-                                .addComponent(txtAgencia, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(lblComision)
-                                .addGap(17, 17, 17)
-                                .addComponent(txtPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(lblMoney)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(lblMoney1)
-                                .addGap(58, 58, 58)))
-                        .addGap(60, 60, 60))
+                                .addComponent(txtSMonto, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addComponent(lblVenta)
                     .addComponent(lblCliente)
-                    .addComponent(lblVendedor)
                     .addComponent(lblVivienda)
+                    .addComponent(lblVendedor)
                     .addGroup(txtMontoLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addComponent(cbxCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(27, 27, 27)
-                        .addComponent(btAniadirCasa))
+                        .addGap(101, 101, 101)
+                        .addComponent(btGuardar1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77)
+                        .addComponent(btLimpiar1))
                     .addGroup(txtMontoLayout.createSequentialGroup()
-                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblVenDni)
-                            .addComponent(lblVenApellido))
+                        .addComponent(lblVenApellido1)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtAgencia, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblComision)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblMoney1))
+                    .addGroup(txtMontoLayout.createSequentialGroup()
+                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(txtMontoLayout.createSequentialGroup()
+                                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblVenDni)
+                                    .addComponent(lblVenApellido))
+                                .addGap(18, 18, 18)
+                                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtVenApellido)
+                                    .addComponent(txtVenDni, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblVenNombre)
+                                    .addComponent(lblVenTelef)))
+                            .addGroup(txtMontoLayout.createSequentialGroup()
+                                .addGap(20, 20, 20)
+                                .addComponent(cbxCasa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtVenApellido)
-                            .addComponent(txtVenDni, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblVenNombre)
-                            .addComponent(lblVenTelef))
-                        .addGap(18, 18, 18)
-                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btAniadirCasa)
                             .addComponent(txtVenNombre)
                             .addComponent(txtVenTelef, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtMontoLayout.createSequentialGroup()
-                        .addGap(102, 102, 102)
-                        .addComponent(btSeleccionar1)
-                        .addGap(41, 41, 41)
-                        .addComponent(btModificar)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, txtMontoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 396, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(44, 44, 44))))
-            .addGroup(txtMontoLayout.createSequentialGroup()
-                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(txtMontoLayout.createSequentialGroup()
-                        .addGap(437, 437, 437)
-                        .addComponent(lblTitulo))
-                    .addGroup(txtMontoLayout.createSequentialGroup()
-                        .addGap(129, 129, 129)
-                        .addComponent(btGuardar1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(66, 66, 66)
-                        .addComponent(btLimpiar1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62))
         );
         txtMontoLayout.setVerticalGroup(
             txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -512,18 +630,16 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
                 .addGap(23, 23, 23)
                 .addComponent(lblTitulo)
                 .addGap(18, 18, 18)
-                .addComponent(lblVivienda)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btAniadirCasa)
-                    .addGroup(txtMontoLayout.createSequentialGroup()
-                        .addComponent(cbxCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(1, 1, 1)))
-                .addGap(22, 22, 22)
-                .addComponent(lblVendedor)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(txtMontoLayout.createSequentialGroup()
+                        .addComponent(lblVivienda)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(cbxCasa, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btAniadirCasa))
+                        .addGap(22, 22, 22)
+                        .addComponent(lblVendedor)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtVenDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblVenDni)
@@ -535,14 +651,14 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
                             .addComponent(lblVenApellido)
                             .addComponent(lblVenNombre)
                             .addComponent(txtVenNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtAgencia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblVenApellido1)
-                            .addComponent(lblComision)
                             .addComponent(txtPorcentaje, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblMoney1))
-                        .addGap(35, 35, 35)
+                            .addComponent(lblMoney1)
+                            .addComponent(lblComision))
+                        .addGap(21, 21, 21)
                         .addComponent(lblCliente)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -569,24 +685,25 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
                         .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btGuardar1)
                             .addComponent(btLimpiar1)))
-                    .addGroup(txtMontoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(36, 36, 36)
-                        .addGroup(txtMontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btSeleccionar1)
-                            .addComponent(btModificar))))
-                .addContainerGap(41, Short.MAX_VALUE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtMonto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtMonto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(txtMonto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -614,7 +731,7 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
 
     private void btGuardar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardar1ActionPerformed
         try {
-            generarRegistro();
+            guardar();
         } catch (EmptyException ex) {
             System.out.println(ex.getMessage());
         }
@@ -624,18 +741,14 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
         limpiar();
     }//GEN-LAST:event_btLimpiar1ActionPerformed
 
-    private void btSeleccionar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSeleccionar1ActionPerformed
-        //cargarVista();
-    }//GEN-LAST:event_btSeleccionar1ActionPerformed
-
-    private void btModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btModificarActionPerformed
+    private void btGuardarCambiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btGuardarCambiosActionPerformed
         try {
             modificar();
         } catch (EmptyException ex) {
             Logger.getLogger(FrmRegistroInmobiliario.class.getName()).log(Level.SEVERE, null, ex);
         }
         JOptionPane.showMessageDialog(null, "Datos Modificados");
-    }//GEN-LAST:event_btModificarActionPerformed
+    }//GEN-LAST:event_btGuardarCambiosActionPerformed
 
     private void txtAgenciaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAgenciaActionPerformed
         // TODO add your handling code here:
@@ -653,6 +766,32 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
         int fila = tbVenta.getSelectedRow();
         cargarVista(fila);
     }//GEN-LAST:event_tbVentaMouseClicked
+
+    private void cbxCasaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbxCasaMouseEntered
+
+    }//GEN-LAST:event_cbxCasaMouseEntered
+
+    private void btOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btOrdenarActionPerformed
+        if (cbxMetodo.getSelectedIndex() == 0) {
+            ordenar(1);
+        } else if (cbxMetodo.getSelectedIndex() == 1) {
+            ordenar(2);
+        }
+    }//GEN-LAST:event_btOrdenarActionPerformed
+
+    private void cbxCasaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbxCasaMousePressed
+        
+    }//GEN-LAST:event_cbxCasaMousePressed
+
+    private void cbxCasaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_cbxCasaMouseClicked
+        if(cbxCasa.isEnabled()){
+        try {
+            Utilvista.cargarComboViviendas(cbxCasa);
+        } catch (EmptyException ex) {
+            Logger.getLogger(FrmRegistroInmobiliario.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        }
+    }//GEN-LAST:event_cbxCasaMouseClicked
 
     /**
      * @param args the command line arguments
@@ -692,10 +831,16 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAniadirCasa;
     private javax.swing.JButton btGuardar1;
+    private javax.swing.JButton btGuardarCambios;
     private javax.swing.JButton btLimpiar1;
-    private javax.swing.JButton btModificar;
-    private javax.swing.JButton btSeleccionar1;
+    private javax.swing.JButton btOrdenar;
     private javax.swing.JComboBox<String> cbxCasa;
+    private javax.swing.JComboBox<String> cbxCriterio;
+    private javax.swing.JComboBox<String> cbxMetodo;
+    private javax.swing.JComboBox<String> cbxOrden;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblClieApellido;
     private javax.swing.JLabel lblClieDni;
@@ -711,11 +856,13 @@ public class FrmRegistroInmobiliario extends javax.swing.JFrame {
     private javax.swing.JLabel lblVenApellido;
     private javax.swing.JLabel lblVenApellido1;
     private javax.swing.JLabel lblVenDni;
+    private javax.swing.JLabel lblVenDni1;
     private javax.swing.JLabel lblVenNombre;
     private javax.swing.JLabel lblVenTelef;
     private javax.swing.JLabel lblVendedor;
     private javax.swing.JLabel lblVenta;
     private javax.swing.JLabel lblVivienda;
+    private javax.swing.JLabel lblVivienda1;
     private javax.swing.JTable tbVenta;
     private javax.swing.JTextField txtAgencia;
     private javax.swing.JTextField txtClieApellido;

@@ -23,7 +23,7 @@ public class ViviendaControl {
     public Boolean guardar() {
         
         try {
-            getVivienda().setId(getViviendas().getLenght());
+            getVivienda().setId(getViviendas().getLength());
             getViviendas().add(getVivienda());
             return true;
         } catch (Exception e) {

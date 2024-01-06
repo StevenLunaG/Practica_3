@@ -36,7 +36,7 @@ public class DaoImplement<T> implements DaoInterface<T> {
     public Boolean merge(T data, Integer index) {
         DynamicList<T> dl = all();
         try {
-            dl.getNode(index).setInfo(data);
+            dl.getgetNode(index).setInfo(data);
         } catch (EmptyException ex) {
             System.out.println(ex.getMessage());
         }

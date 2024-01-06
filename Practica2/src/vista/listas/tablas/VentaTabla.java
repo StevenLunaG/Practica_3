@@ -11,7 +11,7 @@ public class VentaTabla extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return ventas.getLenght();
+        return ventas.getLength();
     }
 
     @Override

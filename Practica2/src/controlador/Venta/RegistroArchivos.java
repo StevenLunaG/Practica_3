@@ -30,7 +30,7 @@ public class RegistroArchivos extends DaoImplement<Registro>{
 
         
     public Boolean persist(){
-        registro.setId(all().getLenght() + 1);
+        registro.setId(all().getLength() + 1);
         return persist(registro);
     }
 }

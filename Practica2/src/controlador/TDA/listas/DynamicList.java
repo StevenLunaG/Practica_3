@@ -6,14 +6,38 @@ public class DynamicList<E> {
 
     private Node<E> header;
     private Node<E> last;
-    private Integer lenght;
+    private Integer length;
 
     public DynamicList() {
         header = null;
         last = null;
-        lenght = 0;
+        length = 0;
     }
-
+    
+    public Boolean merge(E data, Integer index) throws EmptyException {
+        if (isEmpty()){
+            throw new EmptyException("Vacio");
+        }else{
+            getNode(index).setInfo(data);
+            return true;
+        }
+    }
+    
+    public E[] toArray(){
+        Class clazz = null;
+        E[] matriz = null;
+        if (length > 0) {
+            clazz = header.getInfo().getClass();
+            matriz = (E[])java.lang.reflect.Array.newInstance(clazz, length);
+            Node<E> aux = header;
+            for (int i = 0; i < length; i++) {
+                matriz[i] = aux.getInfo();
+                aux = aux.getNext();
+            }
+        }
+        return matriz;
+    }
+    
     public Node<E> getHeader() {
         return header;
     }
@@ -30,16 +54,16 @@ public class DynamicList<E> {
         this.last = last;
     }
 
-    public Integer getLenght() {
-        return lenght;
+    public Integer getLength() {
+        return length;
     }
 
-    public void setLenght(Integer lenght) {
-        this.lenght = lenght;
+    public void setLenght(Integer length) {
+        this.length = length;
     }
-    
+
     public Boolean isEmpty() {
-        return header == null || getLenght() == 0;
+        return header == null || getLength() == 0;
     }
 
     private void addFirst(E info) {
@@ -48,14 +72,14 @@ public class DynamicList<E> {
             help = new Node<>(info);
             header = help;
             last = help;
-            
+
         } else {
             Node<E> headHelp = header;
             help = new Node<>(info, headHelp);
             header = help;
-            
+
         }
-        lenght++;
+        length++;
     }
 
     private void addLast(E info) {
@@ -66,7 +90,7 @@ public class DynamicList<E> {
             help = new Node<>(info, null);
             last.setNext(help);
             last = help;
-            lenght++;
+            length++;
         }
     }
 
@@ -77,14 +101,14 @@ public class DynamicList<E> {
     public void add(E info, Integer index) throws EmptyException, IndexOutOfBoundsException {
         if (index.intValue() == 0) {
             addFirst(info);
-        } else if (index.intValue() == lenght.intValue()) {
+        } else if (index.intValue() == length.intValue()) {
             addLast(info);
         } else {
             Node<E> search_preview = getNode(index - 1);
             Node<E> search = getNode(index);
             Node<E> help = new Node<>(info, search);
             search_preview.setNext(help);
-            setLenght((Integer) (getLenght()+1));
+            setLenght((Integer) (getLength() + 1));
         }
     }
 
@@ -99,14 +123,14 @@ public class DynamicList<E> {
         return getNode(index).getInfo();
     }
 
-    public Node<E> getNode(Integer index) throws EmptyException{
+    private Node<E> getNode(Integer index) throws EmptyException {
         if (isEmpty()) {
             throw new EmptyException("Error. Lista vacia");
-        } else if (index < 0 || index >= lenght) {
+        } else if (index.intValue() < 0 || index.intValue() >= length) {
             throw new IndexOutOfBoundsException("Error. Fuera de rango");
-        } else if (index == 0) {
+        } else if (index.intValue() == 0) {
             return header;
-        } else if (index== (lenght - 1)) {
+        } else if (index.intValue() == (length - 1)) {
             return last;
         } else {
             Node<E> search = header;
@@ -119,72 +143,8 @@ public class DynamicList<E> {
         }
     }
     
-    
-
-    public E merge(E data, Integer pos) throws EmptyException{
-        Node nodo = getNode(pos);
-        E info = (E) nodo.getInfo();
-        return data = info;
-    }
-
-    public E extractFirst() throws EmptyException {
-        if(isEmpty()){
-            throw new EmptyException("List empty");
-        }else{
-            E element = header.getInfo();
-            Node<E> help = header.getNext();
-            header = null;
-            header = help;
-            if(lenght == 1){
-                last = null;
-            }
-            lenght--;
-            return element;
-        }
-    }
-
-    public E extractLast() throws EmptyException {
-        if(isEmpty()){
-            throw new EmptyException("List emoty");
-        }else{
-            E element = last.getInfo();
-            Node<E> help = getNode(lenght - 2);
-            if(help == null){
-                last = null;
-                if(lenght == 2){
-                    last = header;
-                } else {
-                    header = null;
-                }
-            } else {
-                last = null;
-                last = help;
-                last.setNext(null);
-            }
-            lenght--;
-            return element;
-        }
-    }
-
-    public E extract(Integer index ) throws EmptyException, IndexOutOfBoundsException{
-            if (isEmpty()) {
-                throw new EmptyException("Error. Lista vacia");
-            } else if (index < 0 || index >= lenght) {
-                throw new IndexOutOfBoundsException("Error. Fuera de rango");
-            } else if (index == 0) {
-                return extractFirst();
-            } else if (index== (lenght - 1)) {
-                return extractLast();
-            } else {
-                Node<E> node_preview = getNode(index - 1);
-                Node<E> node_actually = getNode(index);
-                E info = node_actually.getInfo();
-                Node<E> help_next = node_actually.getNext();
-                node_actually = null;
-                node_preview.setNext(help_next);
-                lenght--;
-                return info;
-            }
+    public Node<E> getgetNode(Integer index) throws EmptyException{
+        return getNode(index);
     }
 
     @Override
@@ -200,5 +160,78 @@ public class DynamicList<E> {
             sb.append(e.getMessage());
         }
         return sb.toString();
+    }
+    
+    public E extractFirst() throws EmptyException{
+        if (isEmpty()) {
+            throw new EmptyException("List Empty");
+        }else{
+            E element = header.getInfo();
+            Node<E> help = header.getNext();
+            header = null;
+            header = help;
+            if (length == 1) 
+                last = null;
+            length--;
+            return element;
+        }
+    }
+    
+    public E extractLast() throws EmptyException{
+        if (isEmpty()) {
+            throw new EmptyException("List Empty");
+        }else{
+            E element = last.getInfo();
+            Node<E> help = getNode(length - 2);
+            if (help == null) {
+                last = null;
+                if (length == 2) {
+                    last = header;
+                }else{
+                    header = null;
+                }
+            }else{
+                last = null;
+                last = help;
+                last.setNext(null);
+            }
+            length--;
+            return element;
+        }
+    }
+    
+    public E extract(Integer index) throws EmptyException{
+        if (isEmpty()) {
+            throw new EmptyException("Error. Lista vacia");
+        } else if (index.intValue() < 0 || index.intValue() >= length) {
+            throw new IndexOutOfBoundsException("Error. Fuera de rango");
+        } else if (index.intValue() == 0) {
+            return extractFirst();
+        } else if (index.intValue() == (length - 1)) {
+            return extractLast();
+        } else {
+            Node<E> node_preview = getNode(index - 1);
+            Node<E> node_actually = getNode(index);
+            E info = node_actually.getInfo();
+            Node<E> help_next = node_actually.getNext();
+            node_actually = null;
+            node_preview.setNext(help_next);
+            length--;
+            return info;
+        }
+    }
+    
+    public DynamicList<E> toList(E[] m){
+        reset();
+        for (int i = 0; i < m.length; i++) {
+            this.add(m[i]);
+        }
+        return this;
+    }
+    
+    public void reset(){
+        header = null;
+        last = null;
+        length = 0;
     }
 }

@@ -20,7 +20,7 @@ public class RegistroControl {
     public Boolean guardar() {
         
         try {
-            getRegistro().setId(getRegistros().getLenght());
+            getRegistro().setId(getRegistros().getLength());
             getRegistros().add(getRegistro());
             return true;
         } catch (Exception e) {

@@ -18,13 +18,13 @@ public class Venta {
         this.cliente = new Cliente();
     }
 
-    public Venta(Integer id, Vendedor vendedor, Cliente cliente, LocalDate fecha, Double monto, Vivienda idVivienda) {
+    public Venta(Integer id, Vendedor vendedor, Cliente cliente, LocalDate fecha, Double monto, Vivienda Vivienda) {
         this.id = id;
         this.vendedor = vendedor;
         this.cliente = cliente;
         this.fecha = fecha;
         this.monto = monto;
-        this.vivienda = idVivienda;
+        this.vivienda = Vivienda;
     }
     
     
@@ -77,6 +77,38 @@ public class Venta {
         this.vivienda = vControl.all().getInfo(index);
     }
 
+        public Boolean compare(Venta v, String field, Integer type) {
+        //0 menor 1 mayor
+        switch (type) {
+            case 0:
+                if (field.equalsIgnoreCase("Registro")) {
+                    return id.compareTo(v.getId()) < 0;
+                } else if (field.equalsIgnoreCase("Fecha")) {
+                    return fecha.compareTo(v.getFecha()) < 0;
+                } else if (field.equalsIgnoreCase("Vendedor")) {
+                    return vendedor.getApellido().compareTo(v.getVendedor().getApellido()) < 0;
+                } else if (field.equalsIgnoreCase("Cliente")) {
+                    return cliente.getApellido().compareTo(v.getCliente().getApellido()) < 0;
+                } else if (field.equalsIgnoreCase("Vivienda")) {
+                    return (vivienda.getDescripcion().compareTo(v.getVivienda().getDescripcion())) < 0;
+                }
+            case 1:
+                if (field.equalsIgnoreCase("Registro")) {
+                    return id.compareTo(v.getId()) > 0;
+                } else if (field.equalsIgnoreCase("Fecha")) {
+                    return fecha.compareTo(v.getFecha()) > 0;
+                } else if (field.equalsIgnoreCase("Vendedor")) {
+                    return vendedor.getApellido().compareTo(v.getVendedor().getApellido()) > 0;
+                } else if (field.equalsIgnoreCase("Cliente")) {
+                    return cliente.getApellido().compareTo(v.getCliente().getApellido()) > 0;
+                } else if (field.equalsIgnoreCase("Vivienda")) {
+                    return (vivienda.getDescripcion().compareTo(v.getVivienda().getDescripcion())) > 0;
+                }
+            default:
+                throw new AssertionError();
+        }
+    }
+    
     @Override
     public String toString() {
         return getFecha() + getVendedor().getApellido() + getVendedor().getNombre() + getCliente().getApellido() + getCliente().getNombre() + getVivienda();

@@ -33,7 +33,7 @@ public class ViviendaArchivos extends DaoImplement<Vivienda>{
     }
     
     public Boolean persist(){
-        vivienda.setId(all().getLenght() + 1);
+        vivienda.setId(all().getLength());
         return persist(vivienda);
     }
 }
