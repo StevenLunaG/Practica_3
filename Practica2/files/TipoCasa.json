@@ -1,0 +1,35 @@
+{
+    "controlador.TDA.listas.DynamicList": {
+        "header": {
+            "info": {
+                "@class": "modelo.TipoCasa",
+                "id": 1,
+                "nombre": "Casa",
+                "nouPisos": 2,
+                "descripcion": "Casa completa de dos pisos"
+            },
+            "next": {
+                "info": {
+                    "@class": "modelo.TipoCasa",
+                    "id": 2,
+                    "nombre": "Departamento",
+                    "nouPisos": 2,
+                    "descripcion": "Departamento simple"
+                },
+                "next": {
+                    "info": {
+                        "@class": "modelo.TipoCasa",
+                        "id": 3,
+                        "nombre": "Penthouse",
+                        "nouPisos": 3,
+                        "descripcion": "Penthouse lujosa de tres pisos"
+                    }
+                }
+            }
+        },
+        "last": {
+            "@reference": "..\/header\/next\/next" 
+        },
+        "lenght": 3
+    }
+}
